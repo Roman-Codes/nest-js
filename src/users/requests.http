@@ -1,0 +1,57 @@
+#### Create user
+
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+
+{
+    "email": "test@test.com",
+    "password": "qwerty"
+}
+
+#### Sign in user
+
+POST http://localhost:3000/auth/signin
+Content-Type: application/json
+
+{
+    "email": "test@test.com",
+    "password": "qwerty"
+}
+
+#### Sign user out
+
+POST http://localhost:3000/auth/signout
+
+#### Get current user
+
+GET http://localhost:3000/auth/whoami
+
+#### Find user
+
+GET http://localhost:3000/auth/3
+
+#### Find Multiple users
+
+GET http://localhost:3000/auth?email=koko@loko.com
+
+#### Update user
+
+PATCH http://localhost:3000/auth/3
+Content-Type: application/json
+
+{
+    "email": "qwe@aaaaaa.com",
+}
+#### Delere user
+
+DELETE http://localhost:3000/auth/1
+
+
+
+# ###Set a color
+
+# GET http://localhost:3000/auth/colors/red
+
+# ###Get a color
+
+# GET http://localhost:3000/auth/colors/
