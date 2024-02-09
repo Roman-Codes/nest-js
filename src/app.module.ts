@@ -8,10 +8,11 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { ReportsModule } from './reports/reports.module';
 
-import { User } from './users/user.entity';
-import { Report } from './reports/report.entity';
-
+// import { User } from './users/user.entity';
+// import { Report } from './reports/report.entity';
 import * as session from 'express-session';
+
+const dbConfig = require('../ormconfig.js')!;
 
 @Module({
   imports: [
@@ -19,17 +20,18 @@ import * as session from 'express-session';
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
-        return {
-          type: 'sqlite',
-          database: config.get<string>('DB_NAME'),
-          synchronize: true,
-          entities: [User, Report],
-        };
-      },
-    }),
+    TypeOrmModule.forRoot(dbConfig),
+    // TypeOrmModule.forRootAsync({
+    //   inject: [ConfigService],
+    //   useFactory: (config: ConfigService) => {
+    //     return {
+    //       type: 'sqlite',
+    //       database: config.get<string>('DB_NAME'),
+    //       synchronize: true,
+    //       entities: [User, Report],
+    //     };
+    //   },
+    // }),
     // TypeOrmModule.forRoot({
     //   type: 'sqlite',
     //   database: 'db.sqlite',
@@ -51,11 +53,12 @@ import * as session from 'express-session';
   ],
 })
 export class AppModule {
+  constructor(private configService: ConfigService) {}
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(
         session({
-          secret: ['asdfasfd'],
+          secret: [this.configService.get('COOKIE_KEY')],
         }),
       )
       .forRoutes('*');
